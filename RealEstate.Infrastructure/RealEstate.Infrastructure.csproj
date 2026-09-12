@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Seed\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
