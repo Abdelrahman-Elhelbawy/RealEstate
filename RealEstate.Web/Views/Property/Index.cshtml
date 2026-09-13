@@ -1,0 +1,120 @@
+@model List<RealEstate.Application.DTOs.Property.PropertyListDto>
+
+@{
+    ViewData["Title"] = "Property Listings";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar Filter Form Panel -->
+        <div class="col-lg-3">
+            <div class="filter-card">
+                <div class="filter-card-title">
+                    <span><i class="bi bi-funnel-fill me-1 text-primary"></i> Filter Search</span>
+                    <button id="btn-reset-filters" class="btn btn-sm text-primary fw-bold p-0 border-0 bg-transparent">Reset</button>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Search Keyword</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="search-keyword" class="form-control border-start-0" placeholder="Title or City..." />
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Transaction Type</label>
+                    <select id="filter-transaction-type" class="form-select form-select-sm">
+                        <option value="">All Transactions</option>
+                        @foreach (var item in Enum.GetValues<TransactionType>())
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Property Type</label>
+                    <select id="filter-property-type" class="form-select form-select-sm">
+                        <option value="">All Types</option>
+                        @foreach (var item in Enum.GetValues<PropertyType>())
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">City</label>
+                    <input type="text" id="filter-city" class="form-control form-control-sm" placeholder="e.g. Cairo, Giza..." />
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Max Price ($)</label>
+                    <input type="number" id="filter-max-price" class="form-control form-control-sm" placeholder="e.g. 5000000" />
+                </div>
+
+                <div class="filter-group mb-0">
+                    <label class="filter-label">Min Bedrooms</label>
+                    <select id="filter-bedrooms" class="form-select form-select-sm">
+                        <option value="">Any</option>
+                        <option value="1">1+ Beds</option>
+                        <option value="2">2+ Beds</option>
+                        <option value="3">3+ Beds</option>
+                        <option value="4">4+ Beds</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Listing Grid -->
+        <div class="col-lg-9">
+            <!-- Results Header bar -->
+            <div class="results-header">
+                <div class="fw-bold text-dark">
+                    Showing <span id="showing-count" class="text-primary fs-5">@Model.Count</span> Properties
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small text-muted fw-bold text-nowrap">Sort By:</label>
+                        <select id="sort-properties" class="form-select form-select-sm" style="width: auto;">
+                            <option value="newest">Newest First</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group view-btn-group" role="group">
+                        <button type="button" id="btn-view-grid" class="btn btn-sm active" title="Grid View">
+                            <i class="bi bi-grid-fill"></i>
+                        </button>
+                        <button type="button" id="btn-view-list" class="btn btn-sm" title="List View">
+                            <i class="bi bi-list-ul"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Properties Container Grid -->
+            <div id="properties-container" class="row g-4">
+                @if (Model.Any())
+                {
+                    @foreach (var property in Model)
+                    {
+                        @await Html.PartialAsync("Partials/_PropertyCard", property)
+                    }
+                }
+            </div>
+
+            <!-- Empty State when filtering yields 0 -->
+            <div id="no-properties-found" style="display:none;">
+                @await Html.PartialAsync("Partials/_EmptyState", "No properties matched your filter criteria. Try adjusting your filters!")
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/properties.js"></script>
+}

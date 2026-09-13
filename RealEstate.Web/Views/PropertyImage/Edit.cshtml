@@ -1,0 +1,77 @@
+@model RealEstate.Application.DTOs.PropertyImage.UpdatePropertyImageDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Property Image";
+    var properties = ViewBag.Properties as List<RealEstate.Application.DTOs.Property.PropertyListDto>;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="bg-white rounded-4 border p-4 p-md-5 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                <div>
+                    <h3 class="fw-extrabold text-dark m-0 fs-3">Edit Property Image</h3>
+                    <p class="text-muted small m-0">Update image details or upload a new photo file.</p>
+                </div>
+                <a asp-controller="PropertyImage" asp-action="Index" class="btn btn-outline-custom btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                </a>
+            </div>
+
+            <form asp-controller="PropertyImage" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                <div class="mb-3">
+                    <label asp-for="PropertyId" class="form-label fw-bold small text-dark">Target Property</label>
+                    <select asp-for="PropertyId" class="form-select" required>
+                        <option value="">-- Select Property from Database --</option>
+                        @if (properties != null && properties.Any())
+                        {
+                            @foreach (var prop in properties)
+                            {
+                                <option value="@prop.Id">#@prop.Id - @prop.Title (@prop.City)</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold small text-dark">Upload New Image File (Optional)</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                    <small class="text-muted">Uploading a new file replaces the previous image path.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ImageUrl" class="form-label fw-bold small text-dark">Current Image URL / Path</label>
+                    <input asp-for="ImageUrl" class="form-control" required />
+                    <span asp-validation-for="ImageUrl" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DisplayOrder" class="form-label fw-bold small text-dark">Display Order</label>
+                    <input asp-for="DisplayOrder" type="number" class="form-control" required />
+                    <span asp-validation-for="DisplayOrder" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4 form-check ms-1">
+                    <input asp-for="IsPrimary" class="form-check-input" type="checkbox" id="IsPrimaryCheck" />
+                    <label class="form-check-label fw-bold small text-dark" for="IsPrimaryCheck">
+                        Set as Primary Cover Image?
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-3 fw-bold fs-6">
+                    <i class="bi bi-check-lg me-1"></i> Update Property Image
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

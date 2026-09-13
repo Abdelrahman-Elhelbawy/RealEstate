@@ -1,0 +1,179 @@
+@model RealEstate.Web.ViewModels.AdminDashboardViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Overview";
+}
+
+<!-- Dashboard Metric Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-xl-3 col-sm-6">
+        <div class="metric-card">
+            <div class="metric-icon-box bg-primary-subtle text-primary">
+                <i class="bi bi-houses-fill"></i>
+            </div>
+            <div>
+                <div class="metric-value">@Model.TotalProperties</div>
+                <div class="metric-label">Total Properties</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="metric-card">
+            <div class="metric-icon-box bg-success-subtle text-success">
+                <div class="metric-icon-box bg-success-subtle text-success">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+            </div>
+            <div>
+                <div class="metric-value">@Model.TotalAgents</div>
+                <div class="metric-label">Active Agents</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="metric-card">
+            <div class="metric-icon-box bg-warning-subtle text-warning">
+                <i class="bi bi-envelope-paper-fill"></i>
+            </div>
+            <div>
+                <div class="metric-value">@Model.TotalMessages</div>
+                <div class="metric-label">
+                    Messages 
+                    @if (Model.UnreadMessages > 0)
+                    {
+                        <span class="badge bg-danger rounded-pill ms-1">@Model.UnreadMessages unread</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="metric-card">
+            <div class="metric-icon-box bg-danger-subtle text-danger">
+                <i class="bi bi-flag-fill"></i>
+            </div>
+            <div>
+                <div class="metric-value">@Model.TotalReports</div>
+                <div class="metric-label">
+                    Reports
+                    @if (Model.PendingReports > 0)
+                    {
+                        <span class="badge bg-warning text-dark rounded-pill ms-1">@Model.PendingReports pending</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Action Toolbar -->
+<div class="bg-white rounded-3 border p-3 mb-4 shadow-sm d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <div class="fw-bold text-dark">
+        <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Quick Management Actions
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-controller="Property" asp-action="Create" class="btn btn-primary-custom btn-sm">
+            <i class="bi bi-plus-lg me-1"></i> Add Property
+        </a>
+        <a asp-controller="Agent" asp-action="Create" class="btn btn-outline-custom btn-sm">
+            <i class="bi bi-person-plus me-1"></i> Add Agent
+        </a>
+        <a asp-controller="PropertyImage" asp-action="Create" class="btn btn-outline-custom btn-sm">
+            <i class="bi bi-image me-1"></i> Upload Image
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Recent Properties Table -->
+    <div class="col-lg-8">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">Recent Property Listings</h5>
+                <a asp-controller="Property" asp-action="Index" class="btn btn-sm btn-link text-decoration-none">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table admin-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>City</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.RecentProperties.Any())
+                        {
+                            @foreach (var p in Model.RecentProperties)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-muted">#@p.Id</td>
+                                    <td class="fw-bold text-dark">@p.Title</td>
+                                    <td><span class="badge bg-light text-dark border">@p.PropertyType</span></td>
+                                    <td class="fw-bold text-primary">$@p.Price.ToString("N0")</td>
+                                    <td>@p.City</td>
+                                    <td>
+                                        <a asp-controller="Property" asp-action="Details" asp-route-id="@p.Id" class="btn btn-sm btn-light border" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-controller="Property" asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-light border" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-3 text-muted">No properties found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Messages Column -->
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">Recent Inquiries</h5>
+                <a asp-controller="Message" asp-action="Index" class="btn btn-sm btn-link text-decoration-none">Inbox</a>
+            </div>
+            <div class="p-3">
+                @if (Model.RecentMessages.Any())
+                {
+                    @foreach (var msg in Model.RecentMessages)
+                    {
+                        <div class="border-bottom pb-2 mb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong class="text-dark">@(string.IsNullOrEmpty(msg.SenderName) ? "Anonymous" : msg.SenderName)</strong>
+                                @if (!msg.IsRead)
+                                {
+                                    <span class="badge bg-danger rounded-pill">Unread</span>
+                                }
+                            </div>
+                            <small class="text-muted d-block text-truncate">@msg.Content</small>
+                            <div class="mt-1">
+                                <a asp-controller="Message" asp-action="Details" asp-route-id="@msg.Id" class="small text-primary text-decoration-none">Read Full Message &rarr;</a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted small text-center m-0 py-3">No messages received yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

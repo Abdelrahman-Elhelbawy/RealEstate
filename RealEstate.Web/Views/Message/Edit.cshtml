@@ -1,0 +1,66 @@
+@model RealEstate.Application.DTOs.Message.UpdateMessageDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Message";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="bg-white rounded-3 border p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h3 class="fw-bold text-dark m-0">Edit Message</h3>
+                <a asp-controller="Message" asp-action="Index" class="btn btn-outline-custom btn-sm">Back to Inbox</a>
+            </div>
+
+            <form asp-controller="Message" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                <div class="mb-3">
+                    <label asp-for="PropertyId" class="form-label fw-bold small">Property ID</label>
+                    <input asp-for="PropertyId" class="form-control" required />
+                    <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SenderName" class="form-label fw-bold small">Sender Name</label>
+                    <input asp-for="SenderName" class="form-control" />
+                    <span asp-validation-for="SenderName" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SenderPhone" class="form-label fw-bold small">Phone</label>
+                    <input asp-for="SenderPhone" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SenderEmail" class="form-label fw-bold small">Email</label>
+                    <input asp-for="SenderEmail" class="form-control" />
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input asp-for="IsRead" class="form-check-input" type="checkbox" id="IsReadCheck" />
+                    <label class="form-check-label fw-bold small" for="IsReadCheck">
+                        Marked as Read?
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Content" class="form-label fw-bold small">Message Content</label>
+                    <textarea asp-for="Content" class="form-control" rows="4" required></textarea>
+                    <span asp-validation-for="Content" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 fw-bold">
+                    <i class="bi bi-check-lg me-1"></i> Update Message
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

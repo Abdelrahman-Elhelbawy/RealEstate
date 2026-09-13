@@ -1,0 +1,85 @@
+@model List<RealEstate.Application.DTOs.PropertyImage.PropertyImageListDto>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Property Images";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark m-0">Property Images Gallery</h2>
+        <p class="text-muted small m-0">Manage photo assets assigned to properties.</p>
+    </div>
+    <a asp-controller="PropertyImage" asp-action="Create" class="btn btn-primary-custom btn-sm fw-bold">
+        <i class="bi bi-upload me-1"></i> Add Property Image
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="table admin-table align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Preview</th>
+                    <th>Image URL</th>
+                    <th>Primary?</th>
+                    <th>Display Order</th>
+                    <th>Property ID</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var img in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-muted">#@img.Id</td>
+                            <td>
+                                <img src="@img.ImageUrl" alt="Thumbnail" style="width: 54px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=100&q=80';" />
+                            </td>
+                            <td class="small text-truncate" style="max-width: 200px;">@img.ImageUrl</td>
+                            <td>
+                                @if (img.IsPrimary)
+                                {
+                                    <span class="badge bg-success">Primary Cover</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary">Secondary</span>
+                                }
+                            </td>
+                            <td>@img.DisplayOrder</td>
+                            <td>
+                                <span class="badge bg-primary">Property #@img.PropertyId</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-controller="PropertyImage" asp-action="Details" asp-route-id="@img.Id" class="btn btn-light border" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-controller="PropertyImage" asp-action="Edit" asp-route-id="@img.Id" class="btn btn-light border" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form asp-controller="PropertyImage" asp-action="Delete" asp-route-id="@img.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-light border text-danger btn-delete-confirm" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No property images uploaded yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

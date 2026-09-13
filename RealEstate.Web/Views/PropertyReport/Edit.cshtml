@@ -1,0 +1,68 @@
+@model RealEstate.Application.DTOs.PropertyReport.UpdatePropertyReportDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Property Report";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="bg-white rounded-3 border p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h3 class="fw-bold text-dark m-0">Edit Property Report</h3>
+                <a asp-controller="PropertyReport" asp-action="Index" class="btn btn-outline-custom btn-sm">Back to Reports</a>
+            </div>
+
+            <form asp-controller="PropertyReport" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                <div class="mb-3">
+                    <label asp-for="PropertyId" class="form-label fw-bold small">Property ID</label>
+                    <input asp-for="PropertyId" class="form-control" required />
+                    <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Reason" class="form-label fw-bold small">Report Reason</label>
+                    <select asp-for="Reason" class="form-select" asp-items="Html.GetEnumSelectList<ReportReason>()" required></select>
+                    <span asp-validation-for="Reason" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ReporterName" class="form-label fw-bold small">Reporter Name</label>
+                    <input asp-for="ReporterName" class="form-control" required />
+                    <span asp-validation-for="ReporterName" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ReporterPhone" class="form-label fw-bold small">Reporter Phone</label>
+                    <input asp-for="ReporterPhone" class="form-control" required />
+                    <span asp-validation-for="ReporterPhone" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input asp-for="IsResolved" class="form-check-input" type="checkbox" id="IsResolvedCheck" />
+                    <label class="form-check-label fw-bold small" for="IsResolvedCheck">
+                        Is Report Resolved?
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-bold small">Description / Comments</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 fw-bold">
+                    <i class="bi bi-check-lg me-1"></i> Update Report
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

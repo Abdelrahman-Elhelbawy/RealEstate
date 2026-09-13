@@ -1,0 +1,65 @@
+@model RealEstate.Application.DTOs.PropertyReport.CreatePropertyReportDto
+
+@{
+    ViewData["Title"] = "Report Property";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="bg-white rounded-3 border p-4 shadow-sm">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle mb-2" style="width: 56px; height: 56px;">
+                        <i class="bi bi-flag-fill fs-3"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Report Property Listing</h2>
+                    <p class="text-muted small">Help us maintain quality. Report inaccurate info, fake listings, or inappropriate content.</p>
+                </div>
+
+                <form asp-controller="PropertyReport" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="PropertyId" class="form-label fw-bold small">Property ID</label>
+                        <input asp-for="PropertyId" class="form-control" placeholder="Target Property ID" />
+                        <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Reason" class="form-label fw-bold small">Reason for Report</label>
+                        <select asp-for="Reason" class="form-select" asp-items="Html.GetEnumSelectList<ReportReason>()"></select>
+                        <span asp-validation-for="Reason" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ReporterName" class="form-label fw-bold small">Your Name</label>
+                        <input asp-for="ReporterName" class="form-control" placeholder="Full Name" />
+                        <span asp-validation-for="ReporterName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ReporterPhone" class="form-label fw-bold small">Your Phone Number</label>
+                        <input asp-for="ReporterPhone" class="form-control" placeholder="+20 100 000 0000" />
+                        <span asp-validation-for="ReporterPhone" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold small">Description / Comments</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Explain the issue in detail..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">
+                        <i class="bi bi-shield-exclamation me-1"></i> Submit Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

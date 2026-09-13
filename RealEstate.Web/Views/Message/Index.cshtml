@@ -1,0 +1,94 @@
+@model List<RealEstate.Application.DTOs.Message.MessageListDto>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Messages Inbox";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark m-0">Messages Inbox</h2>
+        <p class="text-muted small m-0">Inquiries and messages sent by prospective clients.</p>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="table admin-table align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Sender Name</th>
+                    <th>Contact Info</th>
+                    <th>Property ID</th>
+                    <th>Snippet</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var msg in Model)
+                    {
+                        <tr class="@(msg.IsRead ? "" : "table-active fw-bold")">
+                            <td class="text-muted">#@msg.Id</td>
+                            <td>
+                                @if (msg.IsRead)
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary">Read</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Unread</span>
+                                }
+                            </td>
+                            <td>@(string.IsNullOrEmpty(msg.SenderName) ? "Anonymous Sender" : msg.SenderName)</td>
+                            <td class="small">
+                                <div><i class="bi bi-telephone me-1 text-muted"></i>@(string.IsNullOrEmpty(msg.SenderPhone) ? "-" : msg.SenderPhone)</div>
+                                <div><i class="bi bi-envelope me-1 text-muted"></i>@(string.IsNullOrEmpty(msg.SenderEmail) ? "-" : msg.SenderEmail)</div>
+                            </td>
+                            <td>
+                                <a asp-controller="Property" asp-action="Details" asp-route-id="@msg.PropertyId" class="badge bg-primary text-decoration-none">
+                                    Property #@msg.PropertyId
+                                </a>
+                            </td>
+                            <td class="small text-truncate" style="max-width: 220px;">@msg.Content</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-controller="Message" asp-action="Details" asp-route-id="@msg.Id" class="btn btn-light border" title="View Message">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    @if (!msg.IsRead)
+                                    {
+                                        <form asp-controller="Message" asp-action="MarkAsRead" asp-route-id="@msg.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-light border text-success" title="Mark as Read">
+                                                <i class="bi bi-check2-circle"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    <a asp-controller="Message" asp-action="Edit" asp-route-id="@msg.Id" class="btn btn-light border" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form asp-controller="Message" asp-action="Delete" asp-route-id="@msg.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-light border text-danger btn-delete-confirm" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No client messages received yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

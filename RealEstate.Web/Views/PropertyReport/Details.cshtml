@@ -1,0 +1,71 @@
+@model RealEstate.Application.DTOs.PropertyReport.PropertyReportDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Report Details";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="bg-white rounded-3 border p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <div>
+                    <h3 class="fw-bold text-dark m-0">Property Report #@Model.Id</h3>
+                    <span class="badge @(Model.IsResolved ? "bg-success" : "bg-warning text-dark")">
+                        @(Model.IsResolved ? "Resolved" : "Pending Investigation")
+                    </span>
+                </div>
+                <a asp-controller="PropertyReport" asp-action="Index" class="btn btn-outline-custom btn-sm">Back to Reports</a>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Report Reason</label>
+                    <div><span class="badge bg-danger fs-6">@Model.Reason</span></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Target Property</label>
+                    <div>
+                        <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="badge bg-primary text-decoration-none fs-6">
+                            Property #@Model.PropertyId @(string.IsNullOrEmpty(Model.PropertyTitle) ? "" : $"- {Model.PropertyTitle}")
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Reporter Name</label>
+                    <div class="fw-bold text-dark">@Model.ReporterName</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Reporter Phone</label>
+                    <div>@Model.ReporterPhone</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Filing Date</label>
+                    <div>@Model.CreatedAt.ToString("f")</div>
+                </div>
+            </div>
+
+            <div class="bg-light p-3 rounded-3 border mb-4">
+                <label class="text-muted small fw-bold text-uppercase mb-2 d-block">Report Details / Comments</label>
+                <p class="m-0 text-dark lh-lg">@(string.IsNullOrWhiteSpace(Model.Description) ? "No detailed description provided by reporter." : Model.Description)</p>
+            </div>
+
+            <div class="d-flex gap-2">
+                @if (!Model.IsResolved)
+                {
+                    <form asp-controller="PropertyReport" asp-action="Resolve" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success fw-bold">
+                            <i class="bi bi-check-circle me-1"></i> Resolve Report
+                        </button>
+                    </form>
+                }
+                <a asp-controller="PropertyReport" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-custom">Edit Report</a>
+                <form asp-controller="PropertyReport" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="ms-auto">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger btn-delete-confirm">Delete Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

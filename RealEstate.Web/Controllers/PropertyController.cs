@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.DTOs.Property;
 using RealEstate.Application.Interfaces;
 
@@ -7,10 +7,17 @@ namespace RealEstate.Web.Controllers;
 public class PropertyController : Controller
 {
     private readonly IPropertyService _propertyService;
+    private readonly IAgentService _agentService;
+    private readonly IPropertyImageService _imageService;
 
-    public PropertyController(IPropertyService propertyService)
+    public PropertyController(
+        IPropertyService propertyService,
+        IAgentService agentService,
+        IPropertyImageService imageService)
     {
         _propertyService = propertyService;
+        _agentService = agentService;
+        _imageService = imageService;
     }
 
     // GET: /Property
@@ -28,12 +35,21 @@ public class PropertyController : Controller
         if (property is null)
             return NotFound();
 
+        var images = await _imageService.GetByPropertyIdAsync(id);
+        ViewBag.Images = images;
+
+        if (property.AgentId > 0)
+        {
+            ViewBag.Agent = await _agentService.GetByIdAsync(property.AgentId);
+        }
+
         return View(property);
     }
 
     // GET: /Property/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        ViewBag.Agents = await _agentService.GetAllAsync();
         return View();
     }
 
@@ -43,7 +59,10 @@ public class PropertyController : Controller
     public async Task<IActionResult> Create(CreatePropertyDto dto)
     {
         if (!ModelState.IsValid)
+        {
+            ViewBag.Agents = await _agentService.GetAllAsync();
             return View(dto);
+        }
 
         var propertyId = await _propertyService.CreateAsync(dto);
 
@@ -77,6 +96,7 @@ public class PropertyController : Controller
             AgentId = property.AgentId
         };
 
+        ViewBag.Agents = await _agentService.GetAllAsync();
         return View(dto);
     }
 
@@ -88,7 +108,10 @@ public class PropertyController : Controller
         UpdatePropertyDto dto)
     {
         if (!ModelState.IsValid)
+        {
+            ViewBag.Agents = await _agentService.GetAllAsync();
             return View(dto);
+        }
 
         var result = await _propertyService.UpdateAsync(id, dto);
 

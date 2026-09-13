@@ -1,0 +1,95 @@
+@model List<RealEstate.Application.DTOs.PropertyReport.PropertyReportListDto>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Property Reports";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark m-0">Property Reports</h2>
+        <p class="text-muted small m-0">Flagged property listings and moderation reports submitted by users.</p>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="table admin-table align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th>Reporter</th>
+                    <th>Phone</th>
+                    <th>Property ID</th>
+                    <th>Submitted At</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var report in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-muted">#@report.Id</td>
+                            <td>
+                                @if (report.IsResolved)
+                                {
+                                    <span class="badge bg-success-subtle text-success">Resolved</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Pending Action</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="badge bg-danger-subtle text-danger fw-bold">@report.Reason</span>
+                            </td>
+                            <td class="fw-bold text-dark">@report.ReporterName</td>
+                            <td>@report.ReporterPhone</td>
+                            <td>
+                                <a asp-controller="Property" asp-action="Details" asp-route-id="@report.PropertyId" class="badge bg-primary text-decoration-none">
+                                    Property #@report.PropertyId
+                                </a>
+                            </td>
+                            <td class="small text-muted">@report.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-controller="PropertyReport" asp-action="Details" asp-route-id="@report.Id" class="btn btn-light border" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    @if (!report.IsResolved)
+                                    {
+                                        <form asp-controller="PropertyReport" asp-action="Resolve" asp-route-id="@report.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-light border text-success" title="Mark Resolved">
+                                                <i class="bi bi-check-circle"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    <a asp-controller="PropertyReport" asp-action="Edit" asp-route-id="@report.Id" class="btn btn-light border" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form asp-controller="PropertyReport" asp-action="Delete" asp-route-id="@report.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-light border text-danger btn-delete-confirm" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">No property reports filed.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

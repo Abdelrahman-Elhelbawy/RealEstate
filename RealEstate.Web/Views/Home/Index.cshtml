@@ -1,0 +1,187 @@
+@model List<RealEstate.Application.DTOs.Property.PropertyListDto>
+
+@{
+    ViewData["Title"] = "Discover Extraordinary Spaces";
+    var featured = Model.Where(p => p.IsFeatured).ToList();
+    var latest = Model.Take(6).ToList();
+}
+
+<!-- Modern Vibrant Editorial Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="hero-index-tag">
+                    <i class="bi bi-sparkles me-1"></i> Premium Real Estate Collection
+                </span>
+                <h1 class="hero-title">Find a Place Where Life Unfolds Beautifully</h1>
+                <p class="hero-subtitle">
+                    Explore curated luxury villas, modern city apartments, and prime commercial developments with transparent pricing and verified listings.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#featured-section" class="btn btn-primary-custom">
+                        Explore Listings <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                    <a asp-controller="Message" asp-action="Create" class="btn btn-outline-custom">
+                        Contact Agent
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Floating Search Bar -->
+<div class="container">
+    <div class="search-box-card">
+        <form asp-controller="Property" asp-action="Index" method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label"><i class="bi bi-search me-1 text-primary"></i> Keyword</label>
+                    <input type="text" name="search" class="form-control" placeholder="City, Title, Neighborhood..." />
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <label class="form-label"><i class="bi bi-building me-1 text-primary"></i> Property Type</label>
+                    <select name="propertyType" class="form-select" asp-items="Html.GetEnumSelectList<PropertyType>()">
+                        <option value="">All Property Types</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <label class="form-label"><i class="bi bi-tag me-1 text-primary"></i> Transaction</label>
+                    <select name="transactionType" class="form-select" asp-items="Html.GetEnumSelectList<TransactionType>()">
+                        <option value="">Sale & Rent</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3">
+                        <i class="bi bi-search me-1"></i> Search Properties
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Featured Properties Section -->
+<section id="featured-section" class="py-5 my-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="text-primary fw-bold text-uppercase tracking-wider small">Handpicked Portfolio</span>
+                <h2 class="fw-bold text-dark m-0 fs-1">Featured Properties</h2>
+            </div>
+            <a asp-controller="Property" asp-action="Index" class="btn btn-outline-custom">
+                View All <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        @if (featured.Any())
+        {
+            <div class="row g-4">
+                @foreach (var property in featured)
+                {
+                    @await Html.PartialAsync("Partials/_PropertyCard", property)
+                }
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var property in Model.Take(3))
+                {
+                    @await Html.PartialAsync("Partials/_PropertyCard", property)
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Latest Additions Section -->
+<section class="py-5 my-5 bg-white border-top border-bottom">
+    <div class="container py-3">
+        <div class="text-center max-w-2xl mx-auto mb-5">
+            <span class="text-primary fw-bold text-uppercase tracking-wider small">New Additions</span>
+            <h2 class="fw-bold text-dark fs-1">Latest Available Properties</h2>
+            <p class="text-muted">Discover the newest verified listings added to our real estate index.</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var property in latest)
+            {
+                @await Html.PartialAsync("Partials/_PropertyCard", property)
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Vibrant Feature Pillars Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-primary fw-bold text-uppercase tracking-wider small">Why Choose Us</span>
+            <h2 class="fw-bold text-dark fs-1">The PrimeEstate Experience</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-blue">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h4 class="feature-title">Verified Listings</h4>
+                    <p class="text-muted small lh-lg m-0">Every listing details, specifications, and prices are verified to give you peace of mind.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-orange">
+                        <i class="bi bi-headset"></i>
+                    </div>
+                    <h4 class="feature-title">Direct Agent Contact</h4>
+                    <p class="text-muted small lh-lg m-0">Connect directly with top real estate agents via phone, email, or instant WhatsApp messaging.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-emerald">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h4 class="feature-title">Seamless Experience</h4>
+                    <p class="text-muted small lh-lg m-0">Save favorites, compare properties, and send inquiries instantly with zero friction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cheerful Stats Counter Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">1,250+</div>
+                    <div class="stat-label">Properties Sold</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfied Clients</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">350+</div>
+                    <div class="stat-label">Active Agents</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Cities Covered</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

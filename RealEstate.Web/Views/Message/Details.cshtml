@@ -1,0 +1,67 @@
+@model RealEstate.Application.DTOs.Message.MessageDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Message Details";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="bg-white rounded-3 border p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <div>
+                    <h3 class="fw-bold text-dark m-0">Inquiry #@Model.Id</h3>
+                    <span class="badge @(Model.IsRead ? "bg-secondary" : "bg-danger")">
+                        @(Model.IsRead ? "Read" : "Unread")
+                    </span>
+                </div>
+                <a asp-controller="Message" asp-action="Index" class="btn btn-outline-custom btn-sm">Back to Inbox</a>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Sender Name</label>
+                    <div class="fw-bold fs-5 text-dark">@(string.IsNullOrEmpty(Model.SenderName) ? "Anonymous Sender" : Model.SenderName)</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Associated Property</label>
+                    <div>
+                        <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="badge bg-primary text-decoration-none fs-6">
+                            Property #@Model.PropertyId @(string.IsNullOrEmpty(Model.PropertyTitle) ? "" : $" - {Model.PropertyTitle}")
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Phone</label>
+                    <div>@(string.IsNullOrEmpty(Model.SenderPhone) ? "Not provided" : Model.SenderPhone)</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase">Email</label>
+                    <div>@(string.IsNullOrEmpty(Model.SenderEmail) ? "Not provided" : Model.SenderEmail)</div>
+                </div>
+            </div>
+
+            <div class="bg-light p-3 rounded-3 border mb-4">
+                <label class="text-muted small fw-bold text-uppercase mb-2 d-block">Message Content</label>
+                <p class="m-0 text-dark lh-lg">@Model.Content</p>
+            </div>
+
+            <div class="d-flex gap-2">
+                @if (!Model.IsRead)
+                {
+                    <form asp-controller="Message" asp-action="MarkAsRead" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success fw-bold">
+                            <i class="bi bi-check2-circle me-1"></i> Mark as Read
+                        </button>
+                    </form>
+                }
+                <a asp-controller="Message" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-custom">Edit Message</a>
+                <form asp-controller="Message" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="ms-auto">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger btn-delete-confirm">Delete Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

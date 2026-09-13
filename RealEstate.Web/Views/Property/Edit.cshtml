@@ -1,0 +1,148 @@
+@model RealEstate.Application.DTOs.Property.UpdatePropertyDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Property";
+    var agents = ViewBag.Agents as List<RealEstate.Application.DTOs.Agent.AgentListDto>;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="bg-white rounded-4 border p-4 p-md-5 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                <div>
+                    <h3 class="fw-extrabold text-dark m-0 fs-3">Edit Property Listing</h3>
+                    <p class="text-muted small m-0">Update listing details and assigned agent.</p>
+                </div>
+                <a asp-controller="Property" asp-action="Index" class="btn btn-outline-custom btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                </a>
+            </div>
+
+            <form asp-controller="Property" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label asp-for="Title" class="form-label fw-bold small text-dark">Property Title</label>
+                        <input asp-for="Title" class="form-control" required />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Price" class="form-label fw-bold small text-dark">Price ($)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">$</span>
+                            <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label asp-for="PropertyType" class="form-label fw-bold small text-dark">Property Type</label>
+                        <select asp-for="PropertyType" class="form-select" asp-items="Html.GetEnumSelectList<PropertyType>()" required></select>
+                        <span asp-validation-for="PropertyType" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="TransactionType" class="form-label fw-bold small text-dark">Transaction Type</label>
+                        <select asp-for="TransactionType" class="form-select" asp-items="Html.GetEnumSelectList<TransactionType>()" required></select>
+                        <span asp-validation-for="TransactionType" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="AgentId" class="form-label fw-bold small text-dark">Assigned Agent</label>
+                        <select asp-for="AgentId" class="form-select" required>
+                            <option value="">-- Select Agent from Database --</option>
+                            @if (agents != null && agents.Any())
+                            {
+                                @foreach (var agent in agents)
+                                {
+                                    <option value="@agent.Id">@agent.Name (@(string.IsNullOrEmpty(agent.Phone) ? agent.Email : agent.Phone))</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="AgentId" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label asp-for="Area" class="form-label fw-bold small text-dark">Area (m²)</label>
+                        <input asp-for="Area" type="number" step="0.1" class="form-control" required />
+                        <span asp-validation-for="Area" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Bedrooms" class="form-label fw-bold small text-dark">Bedrooms</label>
+                        <input asp-for="Bedrooms" type="number" class="form-control" required />
+                        <span asp-validation-for="Bedrooms" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Bathrooms" class="form-label fw-bold small text-dark">Bathrooms</label>
+                        <input asp-for="Bathrooms" type="number" class="form-control" required />
+                        <span asp-validation-for="Bathrooms" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Floor" class="form-label fw-bold small text-dark">Floor Level</label>
+                        <input asp-for="Floor" type="number" class="form-control" required />
+                        <span asp-validation-for="Floor" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="City" class="form-label fw-bold small text-dark">City</label>
+                        <input asp-for="City" class="form-control" required />
+                        <span asp-validation-for="City" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Address" class="form-label fw-bold small text-dark">Address / Neighborhood</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Latitude" class="form-label fw-bold small text-dark">Latitude</label>
+                        <input asp-for="Latitude" type="number" step="any" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Longitude" class="form-label fw-bold small text-dark">Longitude</label>
+                        <input asp-for="Longitude" type="number" step="any" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mb-3 form-check ms-1">
+                    <input asp-for="Furnished" class="form-check-input" type="checkbox" id="FurnishedCheck" />
+                    <label class="form-check-label fw-bold small text-dark" for="FurnishedCheck">
+                        Is Fully Furnished?
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-bold small text-dark">Full Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-3 fw-bold fs-6">
+                    <i class="bi bi-check-lg me-1"></i> Update Property Listing
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

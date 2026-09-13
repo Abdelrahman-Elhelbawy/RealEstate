@@ -1,0 +1,65 @@
+@model RealEstate.Application.DTOs.Property.PropertyListDto
+
+<div class="col-lg-4 col-md-6 mb-4 property-card-col" 
+     data-id="@Model.Id"
+     data-title="@Model.Title"
+     data-price="@Model.Price"
+     data-city="@Model.City"
+     data-transaction-type="@Model.TransactionType"
+     data-property-type="@Model.PropertyType"
+     data-bedrooms="@Model.Bedrooms">
+    <div class="property-card">
+        <div class="card-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" 
+                 alt="@Model.Title" 
+                 loading="lazy" 
+                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80';" />
+            
+            <div class="card-badge-top">
+                @if (Model.IsFeatured)
+                {
+                    <span class="badge-featured">FEATURED MONOGRAPH</span>
+                }
+                <span class="badge-tag">@Model.TransactionType</span>
+                <span class="badge-tag">@Model.PropertyType</span>
+            </div>
+
+            <button class="btn-fav" data-property-id="@Model.Id" title="Save to Portfolio" type="button">
+                <i class="bi bi-heart"></i>
+            </button>
+        </div>
+
+        <div class="property-card-body">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="arch-tag">[REF. #@Model.Id.ToString("D3")]</span>
+                <span class="arch-tag">@(string.IsNullOrWhiteSpace(Model.City) ? "LOCATION N/A" : Model.City.ToUpper())</span>
+            </div>
+
+            <div class="card-price">$@Model.Price.ToString("N0")</div>
+
+            <h3 class="card-title-text">
+                <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none text-dark">
+                    @Model.Title
+                </a>
+            </h3>
+
+            <div class="card-specs mt-3">
+                <div class="spec-item" title="Bedrooms">
+                    <span>@Model.Bedrooms BEDS</span>
+                </div>
+                <div class="spec-item" title="Bathrooms">
+                    <span>@Model.Bathrooms BATHS</span>
+                </div>
+                <div class="spec-item" title="Area">
+                    <span>@Model.Area.ToString("N0") M²</span>
+                </div>
+            </div>
+
+            <div class="mt-3 pt-3 border-top">
+                <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary-custom w-100 text-center text-decoration-none">
+                    View Monograph <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

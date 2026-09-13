@@ -1,0 +1,65 @@
+@model RealEstate.Application.DTOs.Message.CreateMessageDto
+
+@{
+    ViewData["Title"] = "Contact Agent";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="bg-white rounded-3 border p-4 shadow-sm">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-2" style="width: 56px; height: 56px;">
+                        <i class="bi bi-envelope-fill fs-3"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Get in Touch</h2>
+                    <p class="text-muted small">Send a message to inquire about properties or ask our real estate team any question.</p>
+                </div>
+
+                <form asp-controller="Message" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="PropertyId" class="form-label fw-bold small">Property ID</label>
+                        <input asp-for="PropertyId" class="form-control" placeholder="Property Reference ID" />
+                        <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="SenderName" class="form-label fw-bold small">Your Full Name</label>
+                        <input asp-for="SenderName" class="form-control" placeholder="John Doe" />
+                        <span asp-validation-for="SenderName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="SenderPhone" class="form-label fw-bold small">Phone Number</label>
+                        <input asp-for="SenderPhone" class="form-control" placeholder="+20 100 000 0000" />
+                        <span asp-validation-for="SenderPhone" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="SenderEmail" class="form-label fw-bold small">Email Address</label>
+                        <input asp-for="SenderEmail" class="form-control" placeholder="name@example.com" />
+                        <span asp-validation-for="SenderEmail" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Content" class="form-label fw-bold small">Message Content</label>
+                        <textarea asp-for="Content" class="form-control" rows="4" placeholder="How can we help you?"></textarea>
+                        <span asp-validation-for="Content" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2 fw-bold">
+                        <i class="bi bi-send me-1"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

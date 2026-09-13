@@ -1,0 +1,156 @@
+/* Modern Vibrant Editorial Home Page Styling */
+.hero-section {
+    position: relative;
+    background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 40%),
+                var(--bg-body);
+    padding: 6rem 0 9rem 0;
+    overflow: hidden;
+}
+
+.hero-index-tag {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-coral);
+    background: var(--coral-light);
+    padding: 8px 20px;
+    border-radius: var(--radius-pill);
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title {
+    font-size: 4.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 620px;
+    margin-bottom: 2.5rem;
+}
+
+/* Floating Rounded Search Console */
+.search-box-card {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: 0 20px 50px -15px rgba(15, 23, 42, 0.1);
+    margin-top: -4.5rem;
+    position: relative;
+    z-index: 10;
+    border: 1px solid var(--border-subtle);
+}
+
+.search-box-card .form-label {
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.search-box-card .form-control,
+.search-box-card .form-select {
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border-subtle);
+    padding: 0.8rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background-color: var(--bg-body);
+    transition: var(--transition);
+}
+
+.search-box-card .form-control:focus,
+.search-box-card .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    background-color: #ffffff;
+}
+
+/* Feature Cards - Vibrant Soft Accent Badges */
+.feature-box {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+    height: 100%;
+}
+
+.feature-box:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-soft);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.feature-icon-wrapper {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.85rem;
+    margin-bottom: 1.5rem;
+}
+
+.icon-blue { background: var(--primary-light); color: var(--primary); }
+.icon-orange { background: var(--coral-light); color: var(--accent-coral); }
+.icon-emerald { background: var(--emerald-light); color: var(--accent-emerald); }
+
+.feature-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+}
+
+/* Cheerful Stats Section */
+.stats-section {
+    background: #ffffff;
+    border-y: 1px solid var(--border-subtle);
+    padding: 5rem 0;
+}
+
+.stat-item {
+    background: var(--bg-body);
+    border-radius: var(--radius-md);
+    padding: 2rem 1.5rem;
+    border: 1px solid var(--border-subtle);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--primary);
+}
+
+.stat-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}

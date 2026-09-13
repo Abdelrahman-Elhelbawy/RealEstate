@@ -1,0 +1,52 @@
+@model RealEstate.Application.DTOs.PropertyImage.PropertyImageDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Image Details";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="bg-white rounded-3 border p-4 shadow-sm text-center">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom text-start">
+                <h3 class="fw-bold text-dark m-0">Image Details #@Model.Id</h3>
+                <a asp-controller="PropertyImage" asp-action="Index" class="btn btn-outline-custom btn-sm">Back to List</a>
+            </div>
+
+            <div class="mb-4">
+                <img src="@Model.ImageUrl" alt="Property Image" class="img-fluid rounded-3 border shadow-sm" style="max-height: 350px; width: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80';" />
+            </div>
+
+            <div class="row text-start g-3 mb-4">
+                <div class="col-6">
+                    <label class="text-muted small fw-bold text-uppercase">Assigned Property</label>
+                    <div>
+                        <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="badge bg-primary">
+                            Property #@Model.PropertyId @(string.IsNullOrEmpty(Model.PropertyTitle) ? "" : $"- {Model.PropertyTitle}")
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label class="text-muted small fw-bold text-uppercase">Primary Cover?</label>
+                    <div>
+                        <span class="badge @(Model.IsPrimary ? "bg-success" : "bg-secondary")">
+                            @(Model.IsPrimary ? "Primary Image" : "Secondary Image")
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="text-muted small fw-bold text-uppercase">Display Order</label>
+                    <div class="fw-bold text-dark">Order position #@Model.DisplayOrder</div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a asp-controller="PropertyImage" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary-custom w-50">Edit Image</a>
+                <form asp-controller="PropertyImage" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="w-50">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger w-100 btn-delete-confirm">Delete Image</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

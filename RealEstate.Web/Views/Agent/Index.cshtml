@@ -1,0 +1,89 @@
+@model List<RealEstate.Application.DTOs.Agent.AgentListDto>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Agent Directory";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark m-0">Agents Directory</h2>
+        <p class="text-muted small m-0">Manage registered real estate agents and their property portfolios.</p>
+    </div>
+    <a asp-controller="Agent" asp-action="Create" class="btn btn-primary-custom btn-sm fw-bold">
+        <i class="bi bi-person-plus me-1"></i> Add New Agent
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="table admin-table align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>WhatsApp</th>
+                    <th>Email</th>
+                    <th>Properties</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var agent in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-muted">#@agent.Id</td>
+                            <td class="fw-bold text-dark">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px;">
+                                        @agent.Name.Substring(0, 1).ToUpper()
+                                    </div>
+                                    <span>@agent.Name</span>
+                                </div>
+                            </td>
+                            <td>@agent.Phone</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(agent.WhatsApp))
+                                {
+                                    <a href="https://wa.me/@agent.WhatsApp" target="_blank" class="text-success text-decoration-none fw-semibold">
+                                        <i class="bi bi-whatsapp me-1"></i> @agent.WhatsApp
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td>@agent.Email</td>
+                            <td>
+                                <span class="badge bg-primary-subtle text-primary fw-bold">@agent.PropertiesCount properties</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-controller="Agent" asp-action="Edit" asp-route-id="@agent.Id" class="btn btn-light border" title="Edit Agent">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form asp-controller="Agent" asp-action="Delete" asp-route-id="@agent.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-light border text-danger btn-delete-confirm" title="Delete Agent">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No agents found in directory.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
