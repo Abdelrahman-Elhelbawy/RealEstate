@@ -17,7 +17,6 @@ public class PropertyController : Controller
     public async Task<IActionResult> Index()
     {
         var properties = await _propertyService.GetAllAsync();
-
         return View(properties);
     }
 

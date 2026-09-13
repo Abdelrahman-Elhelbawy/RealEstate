@@ -1,9 +1,7 @@
-﻿namespace RealEstate.Domain.Entities;
+﻿namespace RealEstate.Application.DTOs.Message;
 
-public class Message
+public class CreateMessageDto
 {
-    public int Id { get; set; }
-
     public string? SenderName { get; set; }
 
     public string? SenderPhone { get; set; }
@@ -12,10 +10,5 @@ public class Message
 
     public string Content { get; set; } = string.Empty;
 
-    public bool IsRead { get; set; }
-
-    // Relationship
     public int PropertyId { get; set; }
-
-    public Property Property { get; set; } = null!;
 }

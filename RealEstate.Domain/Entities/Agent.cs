@@ -8,6 +8,6 @@
         public string Email { get; set; }
 
         // Relationships
-        public List<Property> properties { get; set; }
+        public List<Property> properties { get; set; } = new();
     }
 }

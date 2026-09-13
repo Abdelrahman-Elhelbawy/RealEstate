@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using RealEstate.Infrastructure.Data;
 namespace RealEstate.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260913143421_Add_Agent")]
+    partial class Add_Agent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,9 +74,6 @@ namespace RealEstate.Infrastructure.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SenderEmail")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -88,9 +88,12 @@ namespace RealEstate.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int>("propertyId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyId");
+                    b.HasIndex("propertyId");
 
                     b.ToTable("messages");
                 });
@@ -246,13 +249,13 @@ namespace RealEstate.Infrastructure.Migrations
 
             modelBuilder.Entity("RealEstate.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("RealEstate.Domain.Entities.Property", "Property")
-                        .WithMany("Messages")
-                        .HasForeignKey("PropertyId")
+                    b.HasOne("RealEstate.Domain.Entities.Property", "property")
+                        .WithMany("messages")
+                        .HasForeignKey("propertyId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Property");
+                    b.Navigation("property");
                 });
 
             modelBuilder.Entity("RealEstate.Domain.Entities.Property", b =>
@@ -269,7 +272,7 @@ namespace RealEstate.Infrastructure.Migrations
             modelBuilder.Entity("RealEstate.Domain.Entities.PropertyImage", b =>
                 {
                     b.HasOne("RealEstate.Domain.Entities.Property", "property")
-                        .WithMany("PropertyImages")
+                        .WithMany("propertyImages")
                         .HasForeignKey("propertyId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -280,7 +283,7 @@ namespace RealEstate.Infrastructure.Migrations
             modelBuilder.Entity("RealEstate.Domain.Entities.PropertyReport", b =>
                 {
                     b.HasOne("RealEstate.Domain.Entities.Property", "property")
-                        .WithMany("PropertyReports")
+                        .WithMany("propertyReports")
                         .HasForeignKey("propertyId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -295,11 +298,11 @@ namespace RealEstate.Infrastructure.Migrations
 
             modelBuilder.Entity("RealEstate.Domain.Entities.Property", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("messages");
 
-                    b.Navigation("PropertyImages");
+                    b.Navigation("propertyImages");
 
-                    b.Navigation("PropertyReports");
+                    b.Navigation("propertyReports");
                 });
 #pragma warning restore 612, 618
         }

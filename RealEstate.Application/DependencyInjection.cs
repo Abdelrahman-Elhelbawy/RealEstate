@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.Services;
+using RealEstate.Application.Validators.Agent;
 using RealEstate.Application.Validators.Property;
 
 namespace RealEstate.Application
@@ -12,9 +13,13 @@ namespace RealEstate.Application
             this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining<CreatePropertyValidator>();
-            services.AddValidatorsFromAssemblyContaining<UpdatePropertyValidator>();
-            services.AddScoped<IPropertyService, PropertyService>();
 
+
+            services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<IAgentService, AgentService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IPropertyImageService, PropertyImageService>();
+            services.AddScoped<IPropertyReportService, PropertyReportService>();
             return services;
         }
     }

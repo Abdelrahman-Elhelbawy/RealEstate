@@ -28,9 +28,9 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.Property(x => x.IsRead)
             .IsRequired();
 
-        builder.HasOne(x => x.property)
-            .WithMany(x => x.messages)
-            .HasForeignKey(x => x.propertyId)
+        builder.HasOne(x => x.Property)
+            .WithMany(x => x.Messages)
+            .HasForeignKey(x => x.PropertyId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

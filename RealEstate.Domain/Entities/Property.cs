@@ -26,7 +26,11 @@ public class Property
     public int agentId { get; set; }
     public Agent agent { get; set; }
 
-    public List<Message> messages { get; set; }
-    public List<PropertyImage> propertyImages { get; set; }
-    public List<PropertyReport> propertyReports { get; set; }
+    // Message Relationship
+    public List<Message> Messages { get; set; } = new();
+
+    // Other Relationships
+    public List<PropertyImage> PropertyImages { get; set; } = new();
+
+    public List<PropertyReport> PropertyReports { get; set; } = new();
 }

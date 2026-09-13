@@ -18,7 +18,10 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IPropertyRepository, PropertyRepository>();
-
+        services.AddScoped<IAgentRepository, AgentRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IPropertyImageRepository, PropertyImageRepository>();
+        services.AddScoped<IPropertyReportRepository, PropertyReportRepository>();
         return services;
     }
 }

@@ -28,7 +28,7 @@ public class PropertyReportConfiguration : IEntityTypeConfiguration<PropertyRepo
             .IsRequired();
 
         builder.HasOne(x => x.property)
-            .WithMany(x => x.propertyReports)
+            .WithMany(x => x.PropertyReports)
             .HasForeignKey(x => x.propertyId)
             .OnDelete(DeleteBehavior.NoAction);
     }

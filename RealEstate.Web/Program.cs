@@ -1,9 +1,11 @@
-using RealEstate.Infrastructure.DependencyInjection;
 using RealEstate.Application;
+using RealEstate.Infrastructure.Data;
+using RealEstate.Infrastructure.Data.Seed;
+using RealEstate.Infrastructure.DependencyInjection;
 
 public partial class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,16 @@ public partial class Program
         builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
+
+        // Seed the database with initial data
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<AppDbContext>();
+
+            await PropertySeed.SeedAsync(context);
+        }
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

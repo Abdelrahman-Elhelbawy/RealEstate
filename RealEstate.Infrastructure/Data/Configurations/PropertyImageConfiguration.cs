@@ -21,7 +21,7 @@ public class PropertyImageConfiguration : IEntityTypeConfiguration<PropertyImage
             .IsRequired();
 
         builder.HasOne(x => x.property)
-            .WithMany(x => x.propertyImages)
+            .WithMany(x => x.PropertyImages)
             .HasForeignKey(x => x.propertyId)
             .OnDelete(DeleteBehavior.NoAction);
     }
